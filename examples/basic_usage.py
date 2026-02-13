@@ -4,6 +4,12 @@ Example usage of the Neural Vote library.
 This script demonstrates how to use the UN voting analysis pipeline
 with sample data.
 """
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta

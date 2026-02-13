@@ -36,7 +36,7 @@ class TemporalAnalyzer:
         Create time windows for analysis.
         
         Args:
-            window_size: Size of time window (e.g., '1Y' for 1 year, '6M' for 6 months)
+            window_size: Size of time window (e.g., '1Y' for 1 year, '6M' for 6 months, '30D' for 30 days)
             
         Returns:
             List of (start_date, end_date) tuples
@@ -48,8 +48,22 @@ class TemporalAnalyzer:
         windows = []
         current_date = min_date
         
+        # Parse window size to handle months and years
+        if window_size.endswith('Y'):
+            years = int(window_size[:-1])
+            delta = pd.DateOffset(years=years)
+        elif window_size.endswith('M'):
+            months = int(window_size[:-1])
+            delta = pd.DateOffset(months=months)
+        elif window_size.endswith('D'):
+            days = int(window_size[:-1])
+            delta = pd.Timedelta(days=days)
+        else:
+            # Fallback to pd.Timedelta for other formats
+            delta = pd.Timedelta(window_size)
+        
         while current_date < max_date:
-            next_date = current_date + pd.Timedelta(window_size)
+            next_date = current_date + delta
             windows.append((current_date, min(next_date, max_date)))
             current_date = next_date
         
